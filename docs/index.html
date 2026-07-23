@@ -406,6 +406,20 @@
 // ひとつの作品 = ひとつのオブジェクト。画像を増やすときはこの配列の先頭に1件追加する（新しい順に上へ表示するため）。
 const ITEMS = [
   {
+    src: "images/classroom_snacks_01.png",
+    alt: "放課後の教室でお菓子を分け合いながらわちゃわちゃする3人の女の子のイラスト",
+    title: "放課後のおやつタイム",
+    desc: "教室でお菓子を分け合いながら盛り上がる3人",
+    specs: "1024 × 1024 px · PNG",
+    featured: false,
+    model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
+    seed: "199365787",
+    steps: "28 / 5.0",
+    note: "3人構成・机の境界・黒板の文字表現はAIにとって特に難しく、この1枚にたどり着くまで何度もプロンプト調整を重ねました（黒板の文字は読めない字のままです）",
+    prompt: "3girls, japanese classroom, rows of school desks facing the blackboard, sitting together at desks pushed side by side, individual desks with clear gap between them, distinct desk edges, tall windows along the side wall, side lighting from windows, blackboard visible, clean unobstructed foreground, no desk blocking the camera view, sharing snacks, sweets, laughing, cheerful, happy expressions, school uniform, candid, casual atmosphere, indoors, safe, masterpiece, high score, great score, absurdres",
+    negative: "lowres, bad anatomy, bad hands, extra arms, extra legs, extra fingers, missing fingers, fused faces, extra heads, missing limbs, fused desks, merged furniture, single oversized desk, seamless desks, warped furniture, malformed table, window behind subject, backlit window backdrop, mutated, deformed, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, signature, watermark, username, blurry"
+  },
+  {
     src: "images/selfie_cheek_to_cheek_01.png",
     alt: "頬を寄せ合って自撮りをする2人の女の子のイラスト",
     title: "自撮りショット",
@@ -488,6 +502,7 @@ function buildMeta(item) {
     ["prompt", item.prompt],
     ["negative", item.negative]
   ];
+  if (item.note) rows.push(["note", item.note]);
   for (const [key, value] of rows) {
     dl.appendChild(el("dt", null, key));
     dl.appendChild(el("dd", null, value));
