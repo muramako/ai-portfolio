@@ -403,8 +403,34 @@
 </div>
 
 <script>
-// ひとつの作品 = ひとつのオブジェクト。画像を増やすときはこの配列に1件追加する。
+// ひとつの作品 = ひとつのオブジェクト。画像を増やすときはこの配列の先頭に1件追加する（新しい順に上へ表示するため）。
 const ITEMS = [
+  {
+    src: "images/night_study_desk_01.png",
+    alt: "ランプの明かりの下、夜に宿題をする少女のイラスト",
+    title: "夜の勉強",
+    desc: "ランプの明かりの下、夜に宿題をする少女",
+    specs: "1024 × 1024 px · PNG",
+    featured: false,
+    model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
+    seed: "1035615588",
+    steps: "28 / 5.0",
+    prompt: "1girl, solo, safe, sitting at desk, studying, writing in notebook, pencil, desk lamp light, open textbook, focused expression, casual home clothes, night, window showing stars, warm lamp glow, dim room lighting, indoors, masterpiece, high score, great score, absurdres",
+    negative: "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, signature, watermark, username, blurry"
+  },
+  {
+    src: "images/afterschool_park_reading_01.png",
+    alt: "放課後、公園のベンチで読書する少女のイラスト",
+    title: "放課後の読書",
+    desc: "公園のベンチで読書をする少女",
+    specs: "1024 × 1024 px · PNG",
+    featured: false,
+    model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
+    seed: "949732199",
+    steps: "28 / 5.0",
+    prompt: "1girl, solo, safe, sitting on park bench, reading book, school uniform, backpack beside her, relaxed expression, afternoon sunlight, trees, green leaves, dappled light, gentle breeze, outdoors, soft lighting, warm colors, masterpiece, high score, great score, absurdres",
+    negative: "lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, fewer digits, cropped, worst quality, low quality, low score, bad score, average score, signature, watermark, username, blurry"
+  },
   {
     src: "images/wakeup_energetic_02_fixed.png",
     alt: "元気に伸びをする少女のイラスト",
