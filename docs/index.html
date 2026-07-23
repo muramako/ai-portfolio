@@ -406,6 +406,21 @@
 // ひとつの作品 = ひとつのオブジェクト。画像を増やすときはこの配列の先頭に1件追加する（新しい順に上へ表示するため）。
 const ITEMS = [
   {
+    src: "images/floating_ruins_girl_01.png",
+    alt: "空に浮かぶ巨大な遺跡のふちに座る、白いドレスの少女のイラスト",
+    title: "浮遊遺跡の少女",
+    desc: "空に浮かぶ巨大な遺跡のふちに腰掛ける少女",
+    specs: "1344 × 768 px · PNG",
+    featured: true,
+    pinned: true,
+    model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
+    seed: "1801887497",
+    steps: "32 / 6.0",
+    note: "現実離れした要素（空中に浮かぶ巨大な遺跡＋そこにそぐわない白いドレス姿の少女）を組み合わせたプロンプトを、AIがどこまで正しく解釈できるかを試すために作った1枚。作者のお気に入りのため、新着順に関わらず常に先頭に固定表示しています。",
+    prompt: "1girl, solo, safe, sitting on the edge of a floating ancient ruin, long white hair, hair blowing in the wind, white sleeveless dress, bare feet, no shoes, beautiful detailed face, beautiful detailed eyes, symmetrical face, cute face, delicate facial features, looking at viewer, upper body focus, floating ruins, ancient architecture, crumbling stone pillars, moss covered ruins, intricate details, highly detailed background, floating island, vast sky, huge clouds, dramatic lighting, backlighting, epic scenery, fantasy, masterpiece, high score, great score, absurdres, extremely detailed",
+    negative: "lowres, bad anatomy, bad hands, blurry face, indistinct face, expressionless, asymmetrical eyes, extra fingers, missing fingers, text, error, missing finger, extra digits, fewer digits, worst quality, low quality, low score, bad score, average score, signature, watermark, username, blurry"
+  },
+  {
     src: "images/classroom_snacks_01.png",
     alt: "放課後の教室でお菓子を分け合いながらわちゃわちゃする3人の女の子のイラスト",
     title: "放課後のおやつタイム",
@@ -584,7 +599,9 @@ document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLight
 
 const featuredEl = document.getElementById("featured");
 const gridEl = document.getElementById("grid");
-const featuredItems = ITEMS.filter((item) => item.featured);
+// pinned: true の作品は新着順に関わらずFeatured内の先頭に固定表示する
+const featuredItems = ITEMS.filter((item) => item.featured)
+  .sort((a, b) => (b.pinned === true) - (a.pinned === true));
 const archiveItems = ITEMS.filter((item) => !item.featured);
 
 featuredItems.forEach((item, i) => featuredEl.appendChild(buildFeaturedPiece(item, i)));
