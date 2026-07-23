@@ -433,14 +433,6 @@ const ITEMS = [
   }
 ];
 
-// --- レイアウト検証用のダミー複製（本番公開前に削除すること） ---
-const TEST_PLACEHOLDER_COUNT = 10;
-for (let i = 0; i < TEST_PLACEHOLDER_COUNT; i++) {
-  const base = ITEMS[i % 2];
-  ITEMS.push({ ...base, title: base.title + "（検証用ダミー" + (i + 1) + "）", featured: false });
-}
-// --- ここまで削除対象 ---
-
 function el(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -543,6 +535,7 @@ const archiveItems = ITEMS.filter((item) => !item.featured);
 
 featuredItems.forEach((item, i) => featuredEl.appendChild(buildFeaturedPiece(item, i)));
 archiveItems.forEach((item) => gridEl.appendChild(buildThumb(item)));
+if (archiveItems.length === 0) document.querySelector(".archive").style.display = "none";
 
 document.getElementById("item-count").textContent = String(ITEMS.length).padStart(2, "0");
 document.getElementById("archive-count").textContent = archiveItems.length + " works";
