@@ -11,6 +11,7 @@
     --fg: #f2f2f0;
     --muted: #8a8a92;
     --accent: #d7ff5f;
+    --gold: #ffc857;
     --border: #232327;
     --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
     --sans: -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
@@ -113,6 +114,25 @@
     margin: 0 auto;
     padding: 0 1.5rem;
   }
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-top: 3rem;
+  }
+  .section-head .section-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .section-head::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
   .piece {
     display: flex;
     align-items: flex-start;
@@ -123,6 +143,22 @@
   .piece.reverse {
     flex-direction: row-reverse;
   }
+  /* Spotlight: 通常のジグザグ(.piece)ではなく、画面幅いっぱいのヒーロー表示にする */
+  .piece--spotlight {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.8rem;
+  }
+  .piece--spotlight .frame-wrap { flex: 1 1 auto; }
+  .piece--spotlight .frame-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -48px;
+    background: radial-gradient(ellipse at center, rgba(255, 200, 87, 0.22), transparent 70%);
+    filter: blur(16px);
+    z-index: -1;
+  }
+  .piece--spotlight .info { max-width: 640px; }
   .frame-wrap {
     position: relative;
     padding: 16px;
@@ -136,6 +172,7 @@
     border: 1.5px solid var(--accent);
     opacity: 0.75;
   }
+  .piece--spotlight .corner { border-color: var(--gold); width: 26px; height: 26px; }
   .corner-tl { top: 0; left: 0; border-right: none; border-bottom: none; }
   .corner-br { bottom: 0; right: 0; border-left: none; border-top: none; }
   .frame {
@@ -147,6 +184,7 @@
     isolation: isolate;
     cursor: zoom-in;
   }
+  .piece--spotlight .frame { border-color: rgba(255, 200, 87, 0.35); border-radius: 20px; }
   .frame img {
     display: block;
     width: 100%;
@@ -177,6 +215,7 @@
     letter-spacing: 0.08em;
     margin-bottom: 1rem;
   }
+  .piece--spotlight .info-num { color: var(--gold); }
   .info h2 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 0.6rem; }
   .info .desc { color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin: 0 0 0.9rem; }
   .info .specs {
@@ -373,7 +412,14 @@
   </div>
 </header>
 
-<section class="featured" id="featured"></section>
+<section class="featured">
+  <div id="spotlight"></div>
+
+  <div class="section-head" id="latest-head">
+    <span class="section-label">Latest</span>
+  </div>
+  <div id="latest"></div>
+</section>
 
 <section class="archive">
   <div class="archive-head">
@@ -411,7 +457,6 @@ const ITEMS = [
     title: "浮遊遺跡の少女",
     desc: "空に浮かぶ巨大な遺跡のふちに腰掛ける少女",
     specs: "1344 × 768 px · PNG",
-    featured: true,
     pinned: true,
     model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
     seed: "1801887497",
@@ -426,7 +471,6 @@ const ITEMS = [
     title: "放課後のおやつタイム",
     desc: "教室でお菓子を分け合いながら盛り上がる3人",
     specs: "1024 × 1024 px · PNG",
-    featured: false,
     model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
     seed: "199365787",
     steps: "28 / 5.0",
@@ -440,7 +484,6 @@ const ITEMS = [
     title: "自撮りショット",
     desc: "頬をくっつける距離で自撮りをする2人",
     specs: "1024 × 1024 px · PNG",
-    featured: false,
     model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
     seed: "774460154",
     steps: "28 / 5.0",
@@ -453,7 +496,6 @@ const ITEMS = [
     title: "夜の勉強",
     desc: "ランプの明かりの下、夜に宿題をする少女",
     specs: "1024 × 1024 px · PNG",
-    featured: false,
     model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
     seed: "1035615588",
     steps: "28 / 5.0",
@@ -466,7 +508,6 @@ const ITEMS = [
     title: "放課後の読書",
     desc: "公園のベンチで読書をする少女",
     specs: "1024 × 1024 px · PNG",
-    featured: false,
     model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
     seed: "949732199",
     steps: "28 / 5.0",
@@ -479,7 +520,6 @@ const ITEMS = [
     title: "元気に伸びバージョン",
     desc: "朝、快眠後に伸びをする少女",
     specs: "1024 × 1024 px · PNG",
-    featured: true,
     model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
     seed: "374562408",
     steps: "28 / 5.0",
@@ -492,7 +532,6 @@ const ITEMS = [
     title: "寝ぼけまなこバージョン",
     desc: "同シチュエーションの寝ぼけ顔版",
     specs: "1024 × 1024 px · PNG",
-    featured: true,
     model: "cagliostrolab/animagine-xl-4.0 @ 2b7c1b397761bf5bd3cc42e5b39ec99314a75a96",
     seed: "1880508656",
     steps: "28 / 5.0",
@@ -525,14 +564,18 @@ function buildMeta(item) {
   return dl;
 }
 
-function buildFeaturedPiece(item, index) {
-  const article = el("article", "piece" + (index % 2 === 1 ? " reverse" : ""));
+// globalIndex: ページ全体を通した通し番号(IMG_XX表示用)。reverseIndex: ジグザグの向きを決めるための、そのセクション内でのローカルな連番
+function buildPiece(item, { globalIndex, totalCount, reverseIndex = 0, spotlight = false }) {
+  const classes = ["piece"];
+  if (spotlight) classes.push("piece--spotlight");
+  else if (reverseIndex % 2 === 1) classes.push("reverse");
+  const article = el("article", classes.join(" "));
 
   const frameWrap = el("div", "frame-wrap");
   frameWrap.appendChild(el("span", "corner corner-tl"));
   frameWrap.appendChild(el("span", "corner corner-br"));
   const frame = el("div", "frame");
-  frame.appendChild(el("span", "index", "IMG_" + String(index + 1).padStart(2, "0")));
+  frame.appendChild(el("span", "index", "IMG_" + String(globalIndex + 1).padStart(2, "0")));
   const img = el("img");
   img.src = item.src;
   img.alt = item.alt;
@@ -543,7 +586,7 @@ function buildFeaturedPiece(item, index) {
   article.appendChild(frameWrap);
 
   const info = el("div", "info");
-  info.appendChild(el("span", "info-num", String(index + 1).padStart(2, "0") + " / " + String(ITEMS.length).padStart(2, "0")));
+  info.appendChild(el("span", "info-num", String(globalIndex + 1).padStart(2, "0") + " / " + String(totalCount).padStart(2, "0")));
   info.appendChild(el("h2", null, item.title));
   info.appendChild(el("p", "desc", item.desc));
   info.appendChild(el("p", "specs", item.specs));
@@ -597,15 +640,31 @@ document.getElementById("lightbox-close").addEventListener("click", closeLightbo
 lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
 
-const featuredEl = document.getElementById("featured");
-const gridEl = document.getElementById("grid");
-// pinned: true の作品は新着順に関わらずFeatured内の先頭に固定表示する
-const featuredItems = ITEMS.filter((item) => item.featured)
-  .sort((a, b) => (b.pinned === true) - (a.pinned === true));
-const archiveItems = ITEMS.filter((item) => !item.featured);
+// pinned: true の作品(Spotlight)は新着順に関わらず常に先頭。
+// 残りは新しい順にLATEST_COUNT件だけLatestでジグザグ表示し、それ以外はArchiveのグリッドへ。
+const LATEST_COUNT = 2;
+const spotlightItems = ITEMS.filter((item) => item.pinned);
+const nonSpotlight = ITEMS.filter((item) => !item.pinned);
+const latestItems = nonSpotlight.slice(0, LATEST_COUNT);
+const archiveItems = nonSpotlight.slice(LATEST_COUNT);
 
-featuredItems.forEach((item, i) => featuredEl.appendChild(buildFeaturedPiece(item, i)));
+// IMG_XXの通し番号はページ上での表示順(Spotlight → Latest → Archive)に合わせる
+const displayOrder = [...spotlightItems, ...latestItems, ...archiveItems];
+const globalIndexOf = new Map(displayOrder.map((item, i) => [item, i]));
+
+const spotlightEl = document.getElementById("spotlight");
+const latestEl = document.getElementById("latest");
+const gridEl = document.getElementById("grid");
+
+spotlightItems.forEach((item) => {
+  spotlightEl.appendChild(buildPiece(item, { globalIndex: globalIndexOf.get(item), totalCount: ITEMS.length, spotlight: true }));
+});
+latestItems.forEach((item, i) => {
+  latestEl.appendChild(buildPiece(item, { globalIndex: globalIndexOf.get(item), totalCount: ITEMS.length, reverseIndex: i }));
+});
 archiveItems.forEach((item) => gridEl.appendChild(buildThumb(item)));
+
+if (latestItems.length === 0) document.getElementById("latest-head").style.display = "none";
 if (archiveItems.length === 0) document.querySelector(".archive").style.display = "none";
 
 document.getElementById("item-count").textContent = String(ITEMS.length).padStart(2, "0");
