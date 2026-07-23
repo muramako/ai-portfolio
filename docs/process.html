@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Process – AI Portfolio</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .cases {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+  .empty {
+    padding: 4rem 0;
+    text-align: center;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+  }
+  .case {
+    padding: 3.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .case-head {
+    margin-bottom: 2rem;
+  }
+  .case-head h2 { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 0.6rem; }
+  .case-head .desc { color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin: 0; max-width: 62ch; }
+  .case-related {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+  }
+  .case-related:hover { border-color: var(--accent); }
+
+  .timeline {
+    position: relative;
+    margin: 0;
+    padding-left: 2.4rem;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 0.55rem;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    width: 1px;
+    background: var(--border);
+  }
+  .step {
+    position: relative;
+    padding-bottom: 2.2rem;
+  }
+  .step:last-child { padding-bottom: 0; }
+  .step::before {
+    content: "";
+    position: absolute;
+    left: -2.4rem;
+    top: 0.3rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1.5px solid var(--accent);
+  }
+  .step-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.6rem;
+  }
+  .step-body {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .step-body img {
+    width: 160px;
+    max-width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    display: block;
+    cursor: zoom-in;
+  }
+  .step-body p {
+    flex: 1 1 260px;
+    margin: 0;
+    color: var(--fg);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .insight {
+    margin-top: 2.2rem;
+    padding: 1.1rem 1.3rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--accent);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--fg);
+  }
+  .insight strong {
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="eyebrow"><a href="index.html">← Gallery</a></span>
+  <div class="hero-row">
+    <h1>Process</h1>
+    <p>作品づくりで悩んだこと・うまくいったことを、後で見返せるように残しておく記録です。すべての作品ではなく、知見として残す価値があったものだけを載せています。</p>
+    <div class="hero-count"><strong id="case-count">00</strong>cases</div>
+  </div>
+</header>
+
+<main class="cases" id="cases"></main>
+
+<footer>
+  <span>AI Portfolio</span>
+  <a href="index.html">← Gallery</a>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" type="button">close ✕</button>
+  <div class="lightbox-inner">
+    <figure class="lightbox-figure">
+      <img id="lightbox-img" src="" alt="">
+    </figure>
+  </div>
+</div>
+
+<script>
+// ひとつの「悩んだ話・うまくいった話」= ひとつのオブジェクト。
+// steps は要点となる分岐点だけを残す（全試行を残す必要はない）。
+const CASES = [
+  // 例:
+  // {
+  //   title: "夜桜のライトアップ表現",
+  //   desc: "提灯の light をどう表現するかで試行錯誤した話",
+  //   relatedImage: "images/yozakura_01.png",
+  //   relatedLabel: "夜桜の少女 を見る",
+  //   steps: [
+  //     { label: "Attempt 1", image: "images/process/yozakura/01.png", caption: "..." },
+  //     { label: "Attempt 2", image: "images/process/yozakura/02.png", caption: "..." }
+  //   ],
+  //   insight: "次に活かせる学び"
+  // }
+];
+
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
+function openLightbox(src, alt) {
+  lightboxImg.src = src;
+  lightboxImg.alt = alt || "";
+  lightbox.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeLightbox() {
+  lightbox.classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.getElementById("lightbox-close").addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
+
+function buildCase(caseData) {
+  const article = el("article", "case");
+
+  const head = el("div", "case-head");
+  head.appendChild(el("h2", null, caseData.title));
+  head.appendChild(el("p", "desc", caseData.desc));
+  if (caseData.relatedImage) {
+    const link = el("a", "case-related", (caseData.relatedLabel || "完成した作品を見る") + " →");
+    link.href = "index.html";
+    head.appendChild(link);
+  }
+  article.appendChild(head);
+
+  const timeline = el("div", "timeline");
+  caseData.steps.forEach((step) => {
+    const stepEl = el("div", "step");
+    stepEl.appendChild(el("p", "step-label", step.label));
+    const body = el("div", "step-body");
+    const img = el("img");
+    img.src = step.image;
+    img.alt = step.label;
+    img.loading = "lazy";
+    img.addEventListener("click", () => openLightbox(step.image, step.label));
+    body.appendChild(img);
+    body.appendChild(el("p", null, step.caption));
+    stepEl.appendChild(body);
+    timeline.appendChild(stepEl);
+  });
+  article.appendChild(timeline);
+
+  if (caseData.insight) {
+    const insight = el("div", "insight");
+    insight.appendChild(el("strong", null, "Insight"));
+    insight.appendChild(document.createTextNode(caseData.insight));
+    article.appendChild(insight);
+  }
+
+  return article;
+}
+
+const casesEl = document.getElementById("cases");
+if (CASES.length === 0) {
+  casesEl.appendChild(el("div", "empty", "まだ記録がありません。次の制作から、悩んだ話やうまくいった話をここに残していきます。"));
+} else {
+  CASES.forEach((c) => casesEl.appendChild(buildCase(c)));
+}
+document.getElementById("case-count").textContent = String(CASES.length).padStart(2, "0");
+</script>
+
+</body>
+</html>

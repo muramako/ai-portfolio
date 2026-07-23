@@ -4,134 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI Portfolio</title>
+<link rel="stylesheet" href="style.css">
 <style>
-  :root {
-    --bg: #0b0b0d;
-    --bg-elevated: #131316;
-    --fg: #f2f2f0;
-    --muted: #8a8a92;
-    --accent: #d7ff5f;
-    --gold: #ffc857;
-    --border: #232327;
-    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    --sans: -apple-system, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: var(--sans);
-    -webkit-font-smoothing: antialiased;
-  }
-  body::before,
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-  }
-  body::before {
-    background:
-      radial-gradient(ellipse 1000px 700px at 10% -10%, rgba(215, 255, 95, 0.22), transparent 55%),
-      radial-gradient(ellipse 800px 700px at 105% 25%, rgba(120, 140, 255, 0.16), transparent 55%);
-  }
-  body::after {
-    opacity: 0.07;
-    mix-blend-mode: screen;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  /* ---------- Hero ---------- */
-  .hero {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 6rem 1.5rem 4rem;
-  }
-  .hero .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1.4rem;
-  }
-  .hero .eyebrow::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 8px 1px var(--accent);
-  }
-  .hero-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 2rem;
-    flex-wrap: wrap;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 2.5rem;
-  }
-  .hero h1 {
-    font-size: clamp(2.6rem, 7vw, 4.6rem);
-    line-height: 1;
-    letter-spacing: -0.03em;
-    margin: 0;
-    font-weight: 700;
-  }
-  .hero p {
-    max-width: 34ch;
-    color: var(--muted);
-    line-height: 1.75;
-    font-size: 0.92rem;
-    margin: 0;
-  }
-  .hero-count {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--muted);
-    text-align: right;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-  }
-  .hero-count strong {
-    display: block;
-    font-size: 2.2rem;
-    color: var(--fg);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-  }
-
   /* ---------- Featured (zigzag editorial) ---------- */
   .featured {
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 1.5rem;
-  }
-  .section-head {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding-top: 3rem;
-  }
-  .section-head .section-label {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .section-head::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: var(--border);
   }
   .piece {
     display: flex;
@@ -207,61 +86,7 @@
     border: 1px solid rgba(255, 255, 255, 0.12);
   }
   .info { flex: 1 1 42%; min-width: 0; padding-top: 0.4rem; }
-  .info-num {
-    display: block;
-    font-family: var(--mono);
-    font-size: 0.9rem;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    margin-bottom: 1rem;
-  }
   .piece--spotlight .info-num { color: var(--gold); }
-  .info h2 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 0.6rem; }
-  .info .desc { color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin: 0 0 0.9rem; }
-  .info .specs {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--muted);
-    letter-spacing: 0.04em;
-    margin: 0 0 1.4rem;
-    padding-bottom: 1.4rem;
-    border-bottom: 1px dashed var(--border);
-  }
-
-  .meta-toggle {
-    all: unset;
-    cursor: pointer;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 0.45rem 0.85rem;
-    border-radius: 999px;
-    transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
-  }
-  .meta-toggle:hover, .meta-toggle:focus-visible { color: var(--accent); border-color: var(--accent); }
-  details[open] .meta-toggle { color: var(--accent); border-color: var(--accent); }
-  .info summary { list-style: none; }
-  .info summary::-webkit-details-marker { display: none; }
-
-  .meta {
-    margin: 1.1rem 0 0;
-    padding: 1.1rem 1.3rem;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    font-family: var(--mono);
-    font-size: 0.76rem;
-    line-height: 1.6;
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 0.3rem 1.2rem;
-  }
-  .meta dt { color: var(--muted); white-space: nowrap; }
-  .meta dd { margin: 0; white-space: pre-wrap; word-break: break-word; color: var(--fg); }
 
   @media (max-width: 760px) {
     .piece { flex-direction: column; gap: 1.6rem; padding: 3rem 0; }
@@ -323,82 +148,6 @@
   }
   .thumb:hover .thumb-label,
   .thumb:focus-visible .thumb-label { opacity: 1; }
-
-  /* ---------- Lightbox ---------- */
-  .lightbox {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    background: rgba(6, 6, 7, 0.9);
-    backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1.2rem;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-  }
-  .lightbox.open { opacity: 1; pointer-events: auto; }
-  .lightbox-inner {
-    max-width: 1040px;
-    width: 100%;
-    max-height: 88vh;
-    overflow: auto;
-    display: flex;
-    gap: 2rem;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.8rem;
-  }
-  .lightbox-figure { flex: 1 1 55%; min-width: 0; }
-  .lightbox-figure img { width: 100%; height: auto; border-radius: 10px; display: block; }
-  .lightbox-panel { flex: 1 1 45%; min-width: 0; }
-  .lightbox-panel h2 { font-size: 1.3rem; margin: 0 0 0.5rem; }
-  .lightbox-panel .desc { color: var(--muted); font-size: 0.92rem; margin: 0 0 0.9rem; }
-  .lightbox-panel .specs {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    color: var(--muted);
-    margin: 0 0 1.2rem;
-    padding-bottom: 1.2rem;
-    border-bottom: 1px dashed var(--border);
-  }
-  .lightbox-close {
-    all: unset;
-    cursor: pointer;
-    position: absolute;
-    top: 1.6rem;
-    right: 1.6rem;
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.05em;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 0.4rem 0.75rem;
-    border-radius: 999px;
-  }
-  .lightbox-close:hover { color: var(--accent); border-color: var(--accent); }
-  @media (max-width: 720px) {
-    .lightbox-inner { flex-direction: column; }
-  }
-
-  /* ---------- Footer ---------- */
-  footer {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
-    border-top: 1px solid var(--border);
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.03em;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
 </style>
 </head>
 <body>
@@ -431,6 +180,7 @@
 
 <footer>
   <span>AI Portfolio</span>
+  <a href="process.html">Process →</a>
 </footer>
 
 <div class="lightbox" id="lightbox">
