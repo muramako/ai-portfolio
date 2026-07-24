@@ -2,6 +2,8 @@
 
 AIで生成した、オリジナルキャラクターの画像を紹介するポートフォリオサイト用リポジトリ。GitHub Pagesで公開する。
 
+公開ページ: https://muramako.github.io/ai-portfolio/
+
 ## 目的
 
 - 生成済みのオリジナルキャラクター画像を並べたギャラリーサイトを作り、GitHub Pagesで公開する
