@@ -105,6 +105,61 @@
     line-height: 1.7;
   }
 
+  .step-trigger {
+    margin: 0 0 0.9rem;
+    padding-left: 0.8rem;
+    border-left: 2px solid var(--border);
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .step-prompt-block {
+    margin: 0 0 1rem;
+  }
+  .step-prompt-k {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.35rem;
+  }
+  .step-prompt-k.neg { color: var(--muted); }
+  .step-prompt {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    line-height: 1.65;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    margin: 0 0 0.7rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--fg);
+  }
+  .step-prompt.neg {
+    color: var(--muted);
+    font-size: 0.68rem;
+  }
+  .step-analysis {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.65;
+  }
+  .step-analysis div { margin: 0; }
+  .step-analysis .k {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-right: 0.5em;
+  }
+
   .insight {
     margin-top: 2.2rem;
     padding: 1.1rem 1.3rem;
@@ -160,30 +215,48 @@
 const CASES = [
   {
     title: "猫耳少女 vs 猫の食べ物争奪戦 — タグ設計の迷走",
-    desc: "「猫耳少女」と「本物の猫」を1枚の絵に混在させようとして、AIが人間と動物を取り違え続けた話。",
+    desc: "「猫耳少女」と「本物の猫」を1枚の絵に混在させようとして、AIが人間と動物を取り違え続けた話。細かい微調整は省き、本当の転換点だけを追っている。",
     steps: [
       {
-        label: "Attempt 1 — 肝心の猫がいない",
+        label: "転換点1 — 猫がそもそも写っていなかった",
+        trigger: "依頼: 猫耳少女と猫が食べ物(魚や肉など)を取り合うコミカルな絵。動物(猫)もかわいいアニメ調で描く。",
+        prompt: "masterpiece, best quality, anime style, 1girl, cat ears, cat tail, chibi proportions, comical expression, tug of war over a fish, small cute cat pulling the other end of the fish, dynamic action pose, sparkles, motion lines, open mouth, determined expression, indoor kitchen background, warm lighting, vibrant colors",
+        negative: "lowres, bad anatomy, extra limbs, extra fingers, deformed, blurry, watermark, text, signature, realistic, photo, scary, gore, copyrighted character",
         image: "images/process/catgirl_vs_cat/01_no_cat.png",
-        caption: "猫と少女の取り合いのつもりが、猫耳少女しか描かれず本物の猫が画面に存在しなかった。プロンプト中の「cat」は猫耳アクセサリの説明として使い切られ、独立した動物としての猫までは生成されなかった。"
+        outcome: "猫耳少女だけが描かれ、本物の猫が画面に存在しなかった。",
+        cause: "プロンプト中の「cat」への言及が「cat ears / cat tail」という少女のアクセサリ描写に使い切られ、独立した動物としての猫を指す記述がなかった、という最初の気づき。",
+        change: "猫を独立した被写体として明示するタグを追加(fluffy orange tabby cat, feline, whiskers, paws, cat biting one end of a fish)。"
       },
       {
-        label: "Attempt 2 — 体が猫と融合",
+        label: "転換点2 — 少女の体が猫と融合した",
+        trigger: "猫を明示したことで登場はしたが、その後2回の微調整(頭身がデフォルメで崩れた版 → normal proportionsを足して矯正した版)を経てもまだ別の破綻が出た。",
+        prompt: "masterpiece, best quality, anime style, detailed illustration, normal proportions, orange tabby cat, realistic cat anatomy, detailed fur, cat biting one end of a fish, 1girl, cat ear headband, cat tail, standard anime body proportions, detailed face, comical expression, tug of war over the fish, girl pulling the other end of the fish, both characters determined expression, dynamic action pose, motion lines, sparkles, indoor kitchen background, warm lighting, vibrant colors",
+        negative: "lowres, bad anatomy, extra limbs, extra fingers, deformed, blurry, watermark, text, signature, realistic, photo, scary, gore, copyrighted character, chibi, super deformed, oversized head, giant head, disproportionate",
         image: "images/process/catgirl_vs_cat/02_body_fused.png",
-        caption: "猫を明示的に描写して再挑戦すると猫自体は出てきたが、今度は少女の下半身が縞模様の毛皮になり、人間の脚と猫の体が視覚的に融合してしまった。"
+        outcome: "頭身は自然になったが、少女の下半身が縞模様の毛皮に覆われ、猫の体と視覚的に融合したように見えた。ユーザー「女性の体、猫になってない?」。",
+        cause: "猫の縞模様の描写が少女の脚にも転写された。少女側に「人間の肌・脚」を明示する記述が無く、猫由来の質感がそのまま流用されたと推測。",
+        change: "human girl / bare human legs / plain white t-shirt のように「人間であること」を直接示すタグを追加(その後ネガティブを盛りすぎて猫が全消えする失敗も経て、最終的にこの服装指定に落ち着いた)。この修正で見た目自体は解決し、いったんユーザーに提示。だが「足が消えている箇所がある、釣竿や綱引きという構図が複雑すぎるのでは」という指摘を受け、複雑な小道具・ポーズ指定を全部やめて単純化する方針に転換した。"
       },
       {
-        label: "Attempt 3 — タグを削ったら猫が2匹に",
+        label: "転換点3 — 診断実験: 猫耳少女が猫2匹に化けると判明",
+        trigger: "構図を単純化して出し直したところ、今度は少女が画面の端に追いやられ小さく歪んだ。ユーザー「猫耳少女をちゃんと認識していない。猫耳と猫を誤解しているのでは」との指摘を受け、10回まで自律的に検証してよいと許可を得た。",
+        prompt: "1girl, animal ears, cat ears, cat tail, sitting, looking at cat, cat, fish, kitchen background, duo",
+        negative: "lowres, bad anatomy, extra limbs, missing limbs, extra fingers, deformed, blurry, watermark, text, signature, copyrighted character",
         image: "images/process/catgirl_vs_cat/03_two_cats.png",
-        caption: "「余白を残せば伝わるはず」と catgirl や animal ears / cat ears + duo のような短いタグ構成に切り替えたところ、少女の要素が消え、本物の猫が2匹並ぶ絵になった。「cat」という単語自体が動物としての猫に強く引っ張られる、という手がかりを得た。"
+        outcome: "「猫耳の少女を軽くしてタグを削れば伝わるはず」と考え、あえて人間タグを外して試したところ、少女の要素は完全に消え、本物の猫が2匹並んで描かれた。「catgirl」という単一タグに置き換えても同じ結果になることも確認し、再現性のある現象だと分かった。",
+        cause: "cat ears / cat tail / catgirl のような猫寄りタグと、動物を指す cat タグを同時に使うと、モデルは人間キャラクターの解釈を放棄し、猫を複数体生成する方向に強く引っ張られる。これがこの絵で人と猫が混同され続けていた核心の原因だった。",
+        change: "転換点2で分かっていた「human girl, bare human legs, plain white t-shirt」という人間性を明示するタグを復活させつつ、複雑な構図指定は入れずに組み合わせる。"
       },
       {
-        label: "Attempt 4 — 人間タグを残して解決",
+        label: "転換点4 — 解決",
+        trigger: "転換点3の知見(人間性を示すタグを残す)と、転換点2後半の教訓(構図は単純に)を掛け合わせる。",
+        prompt: "1girl, human girl, orange hair, plain white t-shirt, denim shorts, bare human legs, normal skin tone, cat ear headband accessory, sharp glaring eyes, sitting, looking at cat, orange tabby cat, sitting, looking at girl, raw fish on the floor between them, kitchen background",
+        negative: "lowres, bad anatomy, extra limbs, missing limbs, extra fingers, deformed, blurry, watermark, text, signature, copyrighted character, furry body, animal legs",
         image: "images/process/catgirl_vs_cat/04_resolved.png",
-        caption: "human girl / bare human legs / plain white t-shirt のように「人間であること」を明示するタグは残しつつ、釣竿や綱引きといった複雑な構図指示は削って単純化。猫と少女がそれぞれ独立した存在として安定して描かれるようになった。"
+        outcome: "猫と少女がそれぞれ独立した存在として安定して描かれた。少女の脚も正常で、床に散らばった魚がコミカルな緊迫感を出している。同一プロンプトで別シードにしても同様に安定し、逆に横長構図で正対させるバリエーションは前傾姿勢で顔が歪んで不採用となった。最終的にユーザーがこの構図(体育座り版)を選定。"
       }
     ],
-    insight: "「cat ears」「catgirl」のような猫寄りのタグと、本物の動物を指す「cat」タグを同時に使うと、モデルは人間側の要素を無視して猫2匹の絵に倒れやすい。人間キャラクターを保ちたい場合は服装や肌など「人間であること」を直接示すタグを残す必要がある。また、小道具や動作を細かく指定しすぎるとディテールが崩れやすく、構図はある程度AI側の解釈に委ねた方が安定した。"
+    insight: "「cat ears」「catgirl」のような猫寄りのタグと、本物の動物を指す「cat」タグを同時に使うと、モデルは人間側の要素を無視して猫2匹の絵に倒れやすい(転換点3で確認)。人間キャラクターを保ちたい場合は human girl / bare human legs / plain white t-shirt のように「人間であること」を直接示すタグを残す必要がある。また、小道具や動作(釣竿・綱引きなど)を細かく指定しすぎると四肢の破綻を誘発しやすく、ネガティブプロンプトも一度に盛りすぎると必要な要素まで消してしまう。構図はある程度AI側の解釈に委ねたほうが安定する。"
   }
 ];
 
@@ -227,6 +300,22 @@ function buildCase(caseData) {
   caseData.steps.forEach((step) => {
     const stepEl = el("div", "step");
     stepEl.appendChild(el("p", "step-label", step.label));
+
+    if (step.trigger) {
+      stepEl.appendChild(el("p", "step-trigger", step.trigger));
+    }
+
+    if (step.prompt) {
+      const block = el("div", "step-prompt-block");
+      block.appendChild(el("p", "step-prompt-k", "Prompt"));
+      block.appendChild(el("pre", "step-prompt", step.prompt));
+      if (step.negative) {
+        block.appendChild(el("p", "step-prompt-k neg", "Negative"));
+        block.appendChild(el("pre", "step-prompt neg", step.negative));
+      }
+      stepEl.appendChild(block);
+    }
+
     const body = el("div", "step-body");
     const img = el("img");
     img.src = step.image;
@@ -234,8 +323,26 @@ function buildCase(caseData) {
     img.loading = "lazy";
     img.addEventListener("click", () => openLightbox(step.image, step.label));
     body.appendChild(img);
-    body.appendChild(el("p", null, step.caption));
+    body.appendChild(el("p", null, step.outcome));
     stepEl.appendChild(body);
+
+    if (step.cause || step.change) {
+      const analysis = el("div", "step-analysis");
+      if (step.cause) {
+        const row = el("div");
+        row.appendChild(el("span", "k", "原因の仮説"));
+        row.appendChild(document.createTextNode(step.cause));
+        analysis.appendChild(row);
+      }
+      if (step.change) {
+        const row = el("div");
+        row.appendChild(el("span", "k", "次への変更"));
+        row.appendChild(document.createTextNode(step.change));
+        analysis.appendChild(row);
+      }
+      stepEl.appendChild(analysis);
+    }
+
     timeline.appendChild(stepEl);
   });
   article.appendChild(timeline);
