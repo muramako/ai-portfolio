@@ -158,18 +158,33 @@
 // ひとつの「悩んだ話・うまくいった話」= ひとつのオブジェクト。
 // steps は要点となる分岐点だけを残す（全試行を残す必要はない）。
 const CASES = [
-  // 例:
-  // {
-  //   title: "夜桜のライトアップ表現",
-  //   desc: "提灯の light をどう表現するかで試行錯誤した話",
-  //   relatedImage: "images/yozakura_01.png",
-  //   relatedLabel: "夜桜の少女 を見る",
-  //   steps: [
-  //     { label: "Attempt 1", image: "images/process/yozakura/01.png", caption: "..." },
-  //     { label: "Attempt 2", image: "images/process/yozakura/02.png", caption: "..." }
-  //   ],
-  //   insight: "次に活かせる学び"
-  // }
+  {
+    title: "猫耳少女 vs 猫の食べ物争奪戦 — タグ設計の迷走",
+    desc: "「猫耳少女」と「本物の猫」を1枚の絵に混在させようとして、AIが人間と動物を取り違え続けた話。",
+    steps: [
+      {
+        label: "Attempt 1 — 肝心の猫がいない",
+        image: "images/process/catgirl_vs_cat/01_no_cat.png",
+        caption: "猫と少女の取り合いのつもりが、猫耳少女しか描かれず本物の猫が画面に存在しなかった。プロンプト中の「cat」は猫耳アクセサリの説明として使い切られ、独立した動物としての猫までは生成されなかった。"
+      },
+      {
+        label: "Attempt 2 — 体が猫と融合",
+        image: "images/process/catgirl_vs_cat/02_body_fused.png",
+        caption: "猫を明示的に描写して再挑戦すると猫自体は出てきたが、今度は少女の下半身が縞模様の毛皮になり、人間の脚と猫の体が視覚的に融合してしまった。"
+      },
+      {
+        label: "Attempt 3 — タグを削ったら猫が2匹に",
+        image: "images/process/catgirl_vs_cat/03_two_cats.png",
+        caption: "「余白を残せば伝わるはず」と catgirl や animal ears / cat ears + duo のような短いタグ構成に切り替えたところ、少女の要素が消え、本物の猫が2匹並ぶ絵になった。「cat」という単語自体が動物としての猫に強く引っ張られる、という手がかりを得た。"
+      },
+      {
+        label: "Attempt 4 — 人間タグを残して解決",
+        image: "images/process/catgirl_vs_cat/04_resolved.png",
+        caption: "human girl / bare human legs / plain white t-shirt のように「人間であること」を明示するタグは残しつつ、釣竿や綱引きといった複雑な構図指示は削って単純化。猫と少女がそれぞれ独立した存在として安定して描かれるようになった。"
+      }
+    ],
+    insight: "「cat ears」「catgirl」のような猫寄りのタグと、本物の動物を指す「cat」タグを同時に使うと、モデルは人間側の要素を無視して猫2匹の絵に倒れやすい。人間キャラクターを保ちたい場合は服装や肌など「人間であること」を直接示すタグを残す必要がある。また、小道具や動作を細かく指定しすぎるとディテールが崩れやすく、構図はある程度AI側の解釈に委ねた方が安定した。"
+  }
 ];
 
 function el(tag, className, text) {
